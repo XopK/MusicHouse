@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3307
--- Время создания: Май 25 2023 г., 09:00
+-- Хост: 127.0.0.1:3306
+-- Время создания: Июн 25 2023 г., 20:31
 -- Версия сервера: 8.0.30
--- Версия PHP: 8.1.9
+-- Версия PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `category` (
   `id_category` int NOT NULL,
-  `name_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name_category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `category` (
 INSERT INTO `category` (`id_category`, `name_category`) VALUES
 (1, 'Струнные'),
 (2, 'Клавишные'),
-(3, 'Духовые'),
+(3, 'Духовые2'),
 (4, 'Ударные'),
 (5, 'Электронные'),
 (11, 'Ударные');
@@ -52,10 +52,19 @@ INSERT INTO `category` (`id_category`, `name_category`) VALUES
 
 CREATE TABLE `orders` (
   `id_order` int NOT NULL,
+  `code_order` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` int NOT NULL,
   `tovar` int NOT NULL,
-  `quantity` int NOT NULL
+  `status` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id_order`, `code_order`, `user`, `tovar`, `status`) VALUES
+(20, '1691', 3, 32, 2),
+(21, '1691', 3, 34, 1);
 
 -- --------------------------------------------------------
 
@@ -65,7 +74,7 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `roles` (
   `id_role` int NOT NULL,
-  `name_role` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name_role` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -79,17 +88,37 @@ INSERT INTO `roles` (`id_role`, `name_role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `status`
+--
+
+CREATE TABLE `status` (
+  `id_status` int NOT NULL,
+  `name_status` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `status`
+--
+
+INSERT INTO `status` (`id_status`, `name_status`) VALUES
+(1, 'Принят'),
+(2, 'Отклонен '),
+(3, 'Ожидание');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `tovar`
 --
 
 CREATE TABLE `tovar` (
   `id_tovar` int NOT NULL,
-  `name_tovar` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sale` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `photo` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_tovar` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sale` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_tovar` date NOT NULL,
-  `model` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -99,7 +128,8 @@ CREATE TABLE `tovar` (
 
 INSERT INTO `tovar` (`id_tovar`, `name_tovar`, `sale`, `photo`, `country`, `date_tovar`, `model`, `category`) VALUES
 (32, 'Пианино', '6000', '4974fdc6a0e161aa6fe0bf8f42bf02b6.jpg', 'Россия', '2023-05-17', 'QWE-234', 2),
-(34, 'Саксафон', '25000', 'L012229_b.jpg', 'Италия', '2023-05-02', 'ASD112', 3);
+(34, 'Саксафон', '25000', 'L012229_b.jpg', 'Италия', '2023-05-02', 'ASD112', 3),
+(36, 'Гитара', '100', '6ad71b6c71d1212f3222acbf9a42177a.jpeg', 'Россия', '2023-06-19', 'qw1223', 1);
 
 -- --------------------------------------------------------
 
@@ -109,12 +139,12 @@ INSERT INTO `tovar` (`id_tovar`, `name_tovar`, `sale`, `photo`, `country`, `date
 
 CREATE TABLE `users` (
   `id_user` int NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `surname` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patronymic` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `patronymic` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `role` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -143,13 +173,20 @@ ALTER TABLE `category`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id_order`),
   ADD KEY `user` (`user`),
-  ADD KEY `tovar` (`tovar`);
+  ADD KEY `tovar` (`tovar`),
+  ADD KEY `status` (`status`);
 
 --
 -- Индексы таблицы `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id_role`);
+
+--
+-- Индексы таблицы `status`
+--
+ALTER TABLE `status`
+  ADD PRIMARY KEY (`id_status`);
 
 --
 -- Индексы таблицы `tovar`
@@ -174,13 +211,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `category`
 --
 ALTER TABLE `category`
-  MODIFY `id_category` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_category` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id_order` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_order` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT для таблицы `roles`
@@ -189,10 +226,16 @@ ALTER TABLE `roles`
   MODIFY `id_role` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT для таблицы `status`
+--
+ALTER TABLE `status`
+  MODIFY `id_status` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT для таблицы `tovar`
 --
 ALTER TABLE `tovar`
-  MODIFY `id_tovar` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_tovar` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
@@ -209,7 +252,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id_user`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`tovar`) REFERENCES `tovar` (`id_tovar`);
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`tovar`) REFERENCES `tovar` (`id_tovar`),
+  ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id_status`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `tovar`
